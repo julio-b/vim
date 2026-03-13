@@ -4699,8 +4699,19 @@ draw_tabline(void)
 	{
 	    scol = col;
 
+	    if (tp == curtab)
+	    {
+		cwp = curwin;
+		wp = firstwin;
+	    }
+	    else
+	    {
+		cwp = tp->tp_curwin;
+		wp = tp->tp_firstwin;
+	    }
+
 	    override_success = push_highlight_overrides(
-		    tp->tp_curwin->w_hl, tp->tp_curwin->w_hl_len);
+		    cwp->w_hl, cwp->w_hl_len);
 
 	    // Update them each time since highlight override might change them.
 	    attr_sel = HL_ATTR(HLF_TPS);
@@ -4718,16 +4729,6 @@ draw_tabline(void)
 
 	    screen_putchar(' ', 0, col++, attr);
 
-	    if (tp == curtab)
-	    {
-		cwp = curwin;
-		wp = firstwin;
-	    }
-	    else
-	    {
-		cwp = tp->tp_curwin;
-		wp = tp->tp_firstwin;
-	    }
 
 	    modified = FALSE;
 	    for (wincount = 0; wp != NULL; wp = wp->w_next, ++wincount)
